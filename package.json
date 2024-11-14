@@ -2,12 +2,10 @@
   "name": "meet",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://LoganMartin93.github.io/meet",
+  "homepage": "https://qufranklin.github.io/meet",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "googleapis": "^110.0.0",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/user-event": "^14.5.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -33,6 +31,27 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/index.js", 
+      "!src/hooks/*.js",
+      "!src/context/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": [
+      "html",
+      "text"
+    ]
+  },
+
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -52,6 +71,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1"
+    "@testing-library/react": "^16.0.1",
+    "gh-pages": "^6.1.1",
+    "jest-cucumber": "^4.5.0"
   }
 }
