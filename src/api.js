@@ -87,13 +87,24 @@ const removeQuery = () => {
   }
 };
 
+/**
+ * Retrieves an access token using the provided authorization code.
+ * @param {string} code - The authorization code from Google OAuth.
+ * @returns {string|null} The access token, or null if the fetch fails.
+ */
 const getToken = async (code) => {
+  try {
     const encodeCode = encodeURIComponent(code);
     const response = await fetch(
-        'https://g0woxi8rqa.execute-api.us-west-1.amazonaws.com/dev/api/token' + '/' + encodeCode
+      "https://g0woxi8rqa.execute-api.us-west-1.amazonaws.com/dev/api/token" + "/" + encodeCode
     );
     const { access_token } = await response.json();
-    access_token && localStorage.setItem("access_token", access_token);
-  
+    if (access_token) {
+      localStorage.setItem("access_token", access_token);
+    }
     return access_token;
-  };
+  } catch (error) {
+    console.error("Error fetching token:", error);
+    return null;
+  }
+};

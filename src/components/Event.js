@@ -1,29 +1,32 @@
-
-// src/components/Event.js
-
 import { useState } from "react";
 
 const Event = ({ event }) => {
   const [showDetails, setShowDetails] = useState(false);
+
+  // Format date for better readability
+  const formattedDate = new Date(event.created).toLocaleDateString();
+
   return (
-    <li>
+    <li className="event">
       <div className="eventSummary">
         <h2>{event.summary}</h2>
         <p>{event.location}</p>
-        <p>{event.created}</p>
+        <p>{formattedDate}</p>
       </div>
-      {showDetails ? (
+      {showDetails && (
         <div className="eventDetails">
           <p>{event.description}</p>
         </div>
-      ) : null}
-      <button className="show-details-btn"
+      )}
+      <button
+        className="show-details-btn"
         onClick={() => setShowDetails(!showDetails)}
-        >
-          {showDetails ? "Hide Details" : "Show Details"}
-        </button>
+        aria-expanded={showDetails}
+      >
+        {showDetails ? "Hide Details" : "Show Details"}
+      </button>
     </li>
   );
-}
-  
+};
+
 export default Event;
