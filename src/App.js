@@ -12,6 +12,9 @@ const App = () => {
   const [currentCity, setCurrentCity] = useState("See all cities");
   const [errorAlert, setErrorAlert] = useState("");
 
+  // Add a state to track the visibility of each event's details
+  const [eventDetailsVisible, setEventDetailsVisible] = useState({});
+
   useEffect(() => {
     fetchData();
   }, [currentCity, currentNOE]);
@@ -19,11 +22,19 @@ const App = () => {
   const fetchData = async () => {
     const allEvents = await getEvents();
     const filteredEvents = currentCity === "See all cities" ?
-      allEvents : allEvents.filter(event => event.location === currentCity)
+      allEvents : allEvents.filter(event => event.location === currentCity);
     setEvents(filteredEvents.slice(0, currentNOE));
     setAllLocations(extractLocations(allEvents));
-  }
-  
+  };
+
+  // Toggle the visibility of event details
+  const toggleEventDetails = (eventId) => {
+    setEventDetailsVisible(prevState => ({
+      ...prevState,
+      [eventId]: !prevState[eventId]  // Toggle visibility for the specific event
+    }));
+  };
+
   return (
     <div className="App">
       <CitySearch 
@@ -32,6 +43,8 @@ const App = () => {
       />
       <EventList 
         events={events} 
+        toggleEventDetails={toggleEventDetails} // Pass the function to EventList
+        eventDetailsVisible={eventDetailsVisible} // Pass the visibility state to EventList
       />
       <NumberOfEvents 
         setErrorAlert={setErrorAlert}

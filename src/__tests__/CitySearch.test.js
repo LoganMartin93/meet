@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import CitySearch from '../components/CitySearch';
 import App from '../App';
 import { extractLocations, getEvents } from '../api';
+import { loadFeature, defineFeature } from 'jest-cucumber';
 
 describe('<CitySearch /> component', () => {
   let CitySearchComponent;

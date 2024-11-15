@@ -2,8 +2,8 @@ import Event from "../components/Event";
 import userEvent from "@testing-library/user-event";
 import { render } from '@testing-library/react';
 import mockData from "../mock-data";
+import { loadFeature, defineFeature } from 'jest-cucumber';
 
-// Assuming 'event' is the first mock data object
 const event = mockData[0];
 
 describe('<Event /> component', () => {
@@ -18,8 +18,10 @@ describe('<Event /> component', () => {
         expect(eventTitle).toBeInTheDocument();
     });
 
-    test('renders event start time', () => {
-        const eventTime = EventComponent.queryByText(new RegExp(event.created, 'i'));
+    test('renders event start date', () => {
+        // Format date the same way it is in the component
+        const formattedDate = new Date(event.created).toLocaleDateString();
+        const eventTime = EventComponent.queryByText(formattedDate);
         expect(eventTime).toBeInTheDocument();
     });
 
@@ -28,19 +30,16 @@ describe('<Event /> component', () => {
         expect(eventLocation).toBeInTheDocument();
     });
 
-    // Show Details button
     test('renders event details button', () => {
         const detailButton = EventComponent.queryByText('Show Details');
         expect(detailButton).toBeInTheDocument();
     });
 
-    // Scenario 1: Event details are hidden by default
     test("event's details are hidden by default", () => {
         const eventDetails = EventComponent.container.querySelector('.eventDetails');
         expect(eventDetails).not.toBeInTheDocument();
     });
 
-    // Scenario 2: Show details after clicking "Show Details"
     test('shows details after user clicks on "Show Details" button', async () => {
         const user = userEvent.setup();
         const showDetailButton = EventComponent.queryByText('Show Details');
@@ -50,7 +49,6 @@ describe('<Event /> component', () => {
         expect(eventDetails).toBeInTheDocument();
     });
 
-    // Scenario 3: Hide details after clicking "Hide Details"
     test('hides details after user clicks on "Hide Details" button', async () => {
         const user = userEvent.setup();
         
