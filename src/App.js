@@ -58,15 +58,15 @@ const App = () => {
         allLocations={allLocations} 
         setCurrentCity={setCurrentCity} 
         setInfoAlert={setInfoAlert} />
-      <EventList 
-        events={events} 
-        toggleEventDetails={toggleEventDetails} // Pass the function to EventList
-        eventDetailsVisible={eventDetailsVisible} // Pass the visibility state to EventList
-      />
       <NumberOfEvents 
         setErrorAlert={setErrorAlert}
         currentNOE={currentNOE}
         setCurrentNOE={setCurrentNOE}
+      />  
+      <EventList 
+        events={events} 
+        toggleEventDetails={toggleEventDetails} // Pass the function to EventList
+        eventDetailsVisible={eventDetailsVisible} // Pass the visibility state to EventList
       />
 
       <div className="alerts-container">
