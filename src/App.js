@@ -1,4 +1,5 @@
 import './App.css';
+import CityEventsChart from './components/CityEventsChart';
 import EventList from './components/EventList';
 import CitySearch from './components/CitySearch';
 import NumberOfEvents from './components/NumberOfEvents';
@@ -63,6 +64,9 @@ const App = () => {
         currentNOE={currentNOE}
         setCurrentNOE={setCurrentNOE}
       />  
+      <CityEventsChart 
+        allLocations={allLocations} events={events} 
+      />
       <EventList 
         events={events} 
         toggleEventDetails={toggleEventDetails} // Pass the function to EventList

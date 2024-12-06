@@ -26,7 +26,7 @@ export const getAccessToken = async () => {
         const code = await searchParams.get("code");
         if (!code) {
             const response = await fetch(
-                "YOUR_SERVERLESS_GET_AUTH_URL_ENDPOINT"
+                "https://g0woxi8rqa.execute-api.us-west-1.amazonaws.com/dev/api/token" + '/' + encodeURI
             );
             const result = await response.json();
             const { authUrl } = result;
