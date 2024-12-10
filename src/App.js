@@ -2,10 +2,9 @@ import './App.css';
 import EventList from './components/EventList';
 import CitySearch from './components/CitySearch';
 import NumberOfEvents from './components/NumberOfEvents';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { extractLocations, getEvents } from './api';
-import { InfoAlert, ErrorAlert, WarningAlert} from './components/Alert';
-
+import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
 
 const App = () => {
   const [events, setEvents] = useState([]);
@@ -15,11 +14,18 @@ const App = () => {
   const [infoAlert, setInfoAlert] = useState("");
   const [errorAlert, setErrorAlert] = useState("");
   const [warningAlert, setWarningAlert] = useState('');
- 
-  
 
   // Add a state to track the visibility of each event's details
   const [eventDetailsVisible, setEventDetailsVisible] = useState({});
+
+  const fetchData = useCallback(async () => {
+    const allEvents = await getEvents();
+    const filteredEvents = currentCity === "See all cities"
+      ? allEvents
+      : allEvents.filter(event => event.location === currentCity);
+    setEvents(filteredEvents.slice(0, currentNOE));
+    setAllLocations(extractLocations(allEvents));
+  }, [currentCity, currentNOE]);
 
   useEffect(() => {
     // Check if the user is online and set a warning alert if offline
@@ -29,17 +35,8 @@ const App = () => {
       setWarningAlert("You are offline. Data may be outdated.");
     }
 
-
     fetchData();
-  }, [currentCity, currentNOE]);
-
-  const fetchData = async () => {
-    const allEvents = await getEvents();
-    const filteredEvents = currentCity === "See all cities" ?
-      allEvents : allEvents.filter(event => event.location === currentCity);
-    setEvents(filteredEvents.slice(0, currentNOE));
-    setAllLocations(extractLocations(allEvents));
-  };
+  }, [fetchData]);
 
   // Toggle the visibility of event details
   const toggleEventDetails = (eventId) => {
