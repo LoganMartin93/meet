@@ -2,7 +2,7 @@
   "name": "meet",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://qufranklin.github.io/meet",
+  "homepage": "https://loganmartin93.github.io/meet",
   "dependencies": {
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/user-event": "^14.5.2",
