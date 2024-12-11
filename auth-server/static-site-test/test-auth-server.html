@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test Auth Server</title>
+  </head>
+  <body>
+    <style>
+      #container {
+        max-width: 500px;
+      }
+      h4 {
+        margin-top: 25px;
+      }
+    </style>
+    <main id="container">
+      <h1>OAuth2 Test</h1>
+
+      <!-- Step 1: Get OAuth URL -->
+      <h4><b>Step 1:</b> Get the OAuth URL</h4>
+      <p>Click the button below to get your OAuth URL.</p>
+      <button id="getAuthUrlButton">Get OAuth URL</button>
+      <p id="result"></p>
+      <a id="authURL" href target="_blank">Click to authorize</a>
+
+      <!-- Step 2: Get Code and Exchange for Token -->
+      <h4>Step 2: Get your code and exchange for an access token</h4>
+      <p>
+        After you’re redirected back to your Meet app on GitHub, copy the code
+        from the URI.
+      </p>
+      <br />
+      <label>Code input
+        <input id="code" type="text" value="" />
+      </label>
+      <button id="getToken">Get Token</button>
+      <p id="accessToken"></p>
+
+      <!-- STEP 3 -- MAKE SURE STEP 2 WORKS BEFORE MOVING ON-->
+      <h4>Step 3: Get the calendar events using your access token</h4>
+      <button id="getEvents">Get Events</button>
+      <p id="events"></p>
+    </main>
+
+    <script type="text/javascript">
+      // Step 1: Get the OAuth URL
+      const getAuthUrlButton = document.getElementById("getAuthUrlButton");
+      const resultElement = document.getElementById("result");
+      const resultLink = document.getElementById("authURL");
+      const getAuthURL = "https://g0woxi8rqa.execute-api.us-west-1.amazonaws.com/dev/api/get-auth-url";
+
+      getAuthUrlButton.onclick = function () {
+        fetch(getAuthURL)
+          .then((response) => response.json())
+          .then((json) => {
+            const { authUrl } = json;
+            resultElement.innerText = JSON.stringify(json);
+            resultLink.href = authUrl;
+          })
+          .catch((error) => {
+            resultElement.innerText = "Error fetching auth URL: " + error.message;
+          });
+      };
+
+      // Step 2: Get the code and exchange for the token
+      const codeValue = document.getElementById("code");
+      const accessTokenElement = document.getElementById("accessToken");
+      const getToken = "https://g0woxi8rqa.execute-api.us-west-1.amazonaws.com/dev/api/token";
+
+      const getAccessToken = async () => {
+        let code = codeValue.value;
+
+        // If the authorization code is not URL-encoded, then URL-encode it
+        if (decodeURIComponent(code) === code) {
+          code = encodeURIComponent(codeValue.value);
+        }
+        const getTokenRequest = getToken + "/" + code;
+
+        try {
+          const response = await fetch(getTokenRequest);
+          const json = await response.json();
+          if (json.access_token) {
+            accessTokenElement.innerText = JSON.stringify(json);
+          } else {
+            accessTokenElement.innerText = "Error: Access token not found.";
+          }
+        } catch (error) {
+          accessTokenElement.innerText = "Fetch error: " + error.message;
+        }
+      };
+
+      // Attach the getAccessToken function to the button
+      const getAccessTokenButton = document.getElementById("getToken");
+      getAccessTokenButton.onclick = getAccessToken;
+
+      // -- STEP 3
+      const getEvents = document.getElementById("getEvents");
+      const events = document.getElementById("events");
+      const getCalendarEvents = "https://g0woxi8rqa.execute-api.us-west-1.amazonaws.com/dev/api/get-events";
+
+      getEvents.onclick = function () {
+        const { access_token } = JSON.parse(accessTokenElement.innerText);
+        if (access_token) {
+          const eventRequest = getCalendarEvents + "/" + access_token;
+          fetch(eventRequest)
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (json) {
+              events.innerText = JSON.stringify(json, null, 2);
+            })
+            .catch((error) => {
+              events.innerText = "Error fetching events: " + error.message;
+            });
+        } else {
+          events.innerText = "No valid access token found.";
+        }
+      };
+      // -- END OF STEP 3
+    </script>
+  </body>
+</html>
