@@ -2,7 +2,7 @@
   "name": "meet",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://qufranklin.github.io/meet",
+  "homepage": "https://loganmartin93.github.io/meet",
   "dependencies": {
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/user-event": "^14.5.2",
@@ -11,6 +11,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "recharts": "^2.14.1",
+    "vite-plugin-pwa": "^0.21.1",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.6.0",
     "workbox-broadcast-update": "^6.6.0",
